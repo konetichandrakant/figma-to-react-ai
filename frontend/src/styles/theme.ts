@@ -1,0 +1,43 @@
+export const theme = {
+  colors: {
+    primary: "#667eea",
+    primaryDark: "#5a67d8",
+    primaryLight: "#7c8efc",
+    secondary: "#48bb78",
+    accent: "#f6ad55",
+    accentOrange: "#ed8936",
+    textPrimary: "#1a202c",
+    textSecondary: "#2d3748",
+    textLight: "#4a5568",
+    textMuted: "#718096",
+    bgPrimary: "#ffffff",
+    bgSecondary: "#f7fafc",
+    bgLight: "#edf2f7",
+    border: "#e2e8f0",
+    gradientPrimary: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    gradientSecondary: "linear-gradient(135deg, #48bb78 0%, #38a169 100%)",
+    gradientAccent: "linear-gradient(135deg, #f6ad55 0%, #ed8936 100%)",
+  },
+  fonts: {
+    body: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    heading: "'Poppins', sans-serif",
+  },
+  shadows: {
+    sm: "0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)",
+    md: "0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06)",
+    lg: "0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05)",
+    xl: "0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04)",
+  },
+  radius: {
+    sm: "8px",
+    md: "12px",
+    lg: "20px",
+    xl: "30px",
+    pill: "50px",
+  },
+  transitions: {
+    fast: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    normal: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    slow: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+  },
+};
