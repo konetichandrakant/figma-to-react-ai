@@ -24,6 +24,7 @@ class Project(Base):
     description = Column(Text, default="")
     ui_tree = Column(Text, default="{}")
     generated_code = Column(Text, default="")
+    last_changes = Column(Text, default="")
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -64,8 +64,9 @@ export default function PropertyPanel() {
         width: "280px",
         minWidth: "280px",
         height: "100%",
-        background: theme.colors.bgSecondary,
-        borderLeft: `1px solid ${theme.colors.border}`,
+        background: "rgba(247, 250, 252, 0.7)",
+        backdropFilter: "blur(8px)",
+        borderLeft: `1px solid ${theme.colors.borderLight}`,
         padding: "24px",
         display: "flex",
         flexDirection: "column",
@@ -74,7 +75,7 @@ export default function PropertyPanel() {
         color: theme.colors.textMuted,
         fontSize: "0.9rem",
       }}>
-        <div style={{ fontSize: "2rem", marginBottom: "12px", opacity: 0.3 }}>⊹</div>
+        <div style={{ fontSize: "2rem", marginBottom: "12px", opacity: 0.25 }}>⊹</div>
         Select a component to edit its properties
       </div>
     );
@@ -100,17 +101,19 @@ export default function PropertyPanel() {
   const inputStyle: React.CSSProperties = {
     width: "100%",
     padding: "6px 10px",
-    borderRadius: "6px",
+    borderRadius: theme.radius.sm,
     border: `1px solid ${theme.colors.border}`,
-    fontSize: "0.8rem",
+    fontSize: "0.78rem",
     fontFamily: theme.fonts.body,
     outline: "none",
     background: "#ffffff",
     boxSizing: "border-box",
+    color: theme.colors.textPrimary,
+    transition: theme.transitions.fast,
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: "0.7rem",
+    fontSize: "0.68rem",
     fontWeight: 600,
     color: theme.colors.textMuted,
     marginBottom: "3px",
@@ -122,31 +125,32 @@ export default function PropertyPanel() {
       width: "280px",
       minWidth: "280px",
       height: "100%",
-      background: theme.colors.bgSecondary,
-      borderLeft: `1px solid ${theme.colors.border}`,
+      background: "rgba(247, 250, 252, 0.7)",
+      backdropFilter: "blur(8px)",
+      borderLeft: `1px solid ${theme.colors.borderLight}`,
       overflowY: "auto",
     }}>
       <div style={{
         padding: "16px",
-        borderBottom: `1px solid ${theme.colors.border}`,
+        borderBottom: `1px solid ${theme.colors.borderLight}`,
       }}>
         <div style={{
           fontWeight: 700,
-          fontSize: "0.75rem",
+          fontSize: "0.7rem",
           textTransform: "uppercase" as const,
-          letterSpacing: "0.5px",
+          letterSpacing: "0.8px",
           color: theme.colors.textMuted,
           marginBottom: "8px",
         }}>
           Properties
         </div>
         <div style={{
-          background: theme.colors.primary,
+          background: theme.colors.gradientPrimary,
           color: "#fff",
-          fontSize: "0.8rem",
+          fontSize: "0.75rem",
           fontWeight: 600,
-          padding: "4px 12px",
-          borderRadius: "6px",
+          padding: "3px 12px",
+          borderRadius: theme.radius.pill,
           display: "inline-block",
         }}>
           {node.type}
@@ -155,7 +159,7 @@ export default function PropertyPanel() {
 
       {/* Text content */}
       {(node.type === "Text" || node.type === "Heading" || node.type === "Button" || node.type === "ListItem") && (
-        <div style={{ padding: "12px 16px", borderBottom: `1px solid ${theme.colors.border}` }}>
+        <div style={{ padding: "12px 16px", borderBottom: `1px solid ${theme.colors.borderLight}` }}>
           <label style={labelStyle}>Content</label>
           <textarea
             value={localText}
@@ -167,7 +171,7 @@ export default function PropertyPanel() {
 
       {/* Props */}
       {(node.type === "Input" || node.type === "Image") && (
-        <div style={{ padding: "12px 16px", borderBottom: `1px solid ${theme.colors.border}` }}>
+        <div style={{ padding: "12px 16px", borderBottom: `1px solid ${theme.colors.borderLight}` }}>
           <div style={{ ...labelStyle, marginBottom: "8px" }}>Attributes</div>
           {node.type === "Input" && (
             <div style={{ marginBottom: "8px" }}>
@@ -192,18 +196,18 @@ export default function PropertyPanel() {
 
       {/* Style categories */}
       {STYLE_CATEGORIES.map((cat) => (
-        <div key={cat.label} style={{ padding: "12px 16px", borderBottom: `1px solid ${theme.colors.border}` }}>
+        <div key={cat.label} style={{ padding: "12px 16px", borderBottom: `1px solid ${theme.colors.borderLight}` }}>
           <div style={{
             fontWeight: 700,
-            fontSize: "0.7rem",
+            fontSize: "0.68rem",
             textTransform: "uppercase" as const,
-            letterSpacing: "0.5px",
+            letterSpacing: "0.8px",
             color: theme.colors.textMuted,
             marginBottom: "8px",
           }}>
             {cat.label}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
             {cat.fields.map((field) => (
               <div key={field.key} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <label style={{ ...labelStyle, width: "70px", minWidth: "70px", marginBottom: 0 }}>{field.label}</label>
@@ -212,6 +216,12 @@ export default function PropertyPanel() {
                   value={localStyles[field.key] || ""}
                   onChange={(e) => handleStyleChange(field.key, e.target.value)}
                   placeholder="—"
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = theme.colors.primary;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = theme.colors.border;
+                  }}
                 />
               </div>
             ))}

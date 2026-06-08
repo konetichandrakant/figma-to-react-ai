@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -19,6 +20,7 @@ class ProjectUpdate(BaseModel):
     description: str | None = None
     ui_tree: str | None = None
     generated_code: str | None = None
+    last_changes: str | None = None
 
 
 class ProjectResponse(BaseModel):
@@ -27,20 +29,23 @@ class ProjectResponse(BaseModel):
     description: str
     ui_tree: str
     generated_code: str
+    last_changes: str = ""
     owner_id: int
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     class Config:
         from_attributes = True
 
 
-@router.get("/", response_model=List[ProjectResponse])
+@router.get("", response_model=List[ProjectResponse])
 def list_projects(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     return db.query(Project).filter(Project.owner_id == user.id).all()
 
 
-@router.post("/", response_model=ProjectResponse)
+@router.post("", response_model=ProjectResponse)
 def create_project(req: ProjectCreate, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    project = Project(name=req.name, description=req.description, owner_id=user.id)
+    project = Project(name=req.name, description=req.description, owner_id=user.id, last_changes="Project created")
     db.add(project)
     db.commit()
     db.refresh(project)
@@ -69,6 +74,8 @@ def update_project(project_id: int, req: ProjectUpdate, db: Session = Depends(ge
         project.ui_tree = req.ui_tree
     if req.generated_code is not None:
         project.generated_code = req.generated_code
+    if req.last_changes is not None:
+        project.last_changes = req.last_changes
 
     db.commit()
     db.refresh(project)

@@ -34,7 +34,10 @@ export interface Project {
   description: string;
   ui_tree: string;
   generated_code: string;
+  last_changes: string;
   owner_id: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface DragItem {

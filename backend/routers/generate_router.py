@@ -17,7 +17,7 @@ class GenerateResponse(BaseModel):
     component_name: str
 
 
-@router.post("/", response_model=GenerateResponse)
+@router.post("", response_model=GenerateResponse)
 async def generate_code(
     req: GenerateRequest,
     user: User = Depends(get_current_user),

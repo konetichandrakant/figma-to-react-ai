@@ -61,7 +61,11 @@ export default function CanvasNode({ node, selected }: Props) {
   const nodeStyles: React.CSSProperties = {
     ...node.styles as React.CSSProperties,
     position: "relative" as const,
-    outline: selected ? `2px solid ${theme.colors.primary}` : isOver ? `2px dashed ${theme.colors.primary}` : "none",
+    outline: selected
+      ? `2px solid ${theme.colors.primary}`
+      : isOver
+        ? `2px dashed ${theme.colors.primary}`
+        : "none",
     outlineOffset: "2px",
     opacity: isDragging ? 0.4 : 1,
     cursor: "pointer",
@@ -98,7 +102,7 @@ export default function CanvasNode({ node, selected }: Props) {
           zIndex: 10,
         }}>
           <span style={{
-            background: theme.colors.primary,
+            background: theme.colors.gradientPrimary,
             color: "#fff",
             fontSize: "0.65rem",
             fontWeight: 600,
@@ -122,6 +126,7 @@ export default function CanvasNode({ node, selected }: Props) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              transition: theme.transitions.fast,
             }}
           >
             ✕

@@ -1,0 +1,133 @@
+/* ===================================================
+   Global Effects — inspired by ckoneti-portfolio
+   Dot-grid background, animations, keyframes
+   =================================================== */
+
+/* Dot-grid overlay with vignette (light-theme version) */
+.app-bg {
+  position: relative;
+  min-height: 100vh;
+}
+
+.app-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(102, 126, 234, 0.08) 1px, transparent 1px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 30%, black 80%);
+  mask-image: radial-gradient(ellipse at center, transparent 30%, black 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure content sits above the background effects */
+.app-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Card accent line — scales in from left on hover (portfolio pattern) */
+.card-accent-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease-in-out;
+  border-radius: 12px 12px 0 0;
+}
+
+.card-accent-line:hover,
+.card-hover-wrapper:hover .card-accent-line {
+  transform: scaleX(1);
+}
+
+/* Gradient text for section headings (portfolio pattern) */
+.gradient-heading {
+  background: linear-gradient(to bottom, #1a202c, #718096);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Toast slide-up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Float animation for decorative elements (portfolio pattern) */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-15px) rotate(2deg); }
+  50%      { transform: translateY(-25px) rotate(-2deg); }
+  75%      { transform: translateY(-15px) rotate(1deg); }
+}
+
+/* Spinning ring border (portfolio signature effect) */
+@property --ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spin-ring {
+  from { --ring-angle: 0deg; }
+  to   { --ring-angle: 360deg; }
+}
+
+/* Silver shine text animation (portfolio pattern) */
+@keyframes silver-shine {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Subtle pulse for loading states */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+/* Input focus ring animation */
+.input-ring {
+  position: relative;
+}
+
+.input-ring::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  padding: 2px;
+  background: conic-gradient(from var(--ring-angle), transparent 0%, transparent 60%, rgba(102, 126, 234, 0.4) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  animation: spin-ring 3s linear infinite;
+  pointer-events: none;
+}
+
+.input-ring:focus-within::after {
+  opacity: 1;
+}

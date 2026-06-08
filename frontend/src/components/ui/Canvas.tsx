@@ -31,7 +31,7 @@ export default function Canvas() {
       style={{
         flex: 1,
         overflow: "auto",
-        background: isOver && canDrop ? "#f0f4ff" : "#ffffff",
+        background: isOver && canDrop ? "rgba(102, 126, 234, 0.03)" : "#ffffff",
         transition: theme.transitions.fast,
         position: "relative",
       }}
@@ -42,24 +42,25 @@ export default function Canvas() {
         padding: "32px",
         minHeight: "calc(100vh - 64px)",
       }}>
-        {tree.children.length === 0 ? (
+        {(tree?.children?.length ?? 0) === 0 ? (
           <div style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             minHeight: "400px",
+            background: theme.colors.cardBg,
             border: `2px dashed ${theme.colors.border}`,
             borderRadius: theme.radius.xl,
             color: theme.colors.textMuted,
             fontSize: "1rem",
           }}>
-            <div style={{ fontSize: "3rem", marginBottom: "16px", opacity: 0.3 }}>⊕</div>
-            <div style={{ fontWeight: 600, marginBottom: "4px" }}>Drop components here</div>
+            <div style={{ fontSize: "3rem", marginBottom: "16px", opacity: 0.25 }}>⊕</div>
+            <div style={{ fontWeight: 600, marginBottom: "4px", color: theme.colors.textLight }}>Drop components here</div>
             <div style={{ fontSize: "0.85rem" }}>Drag from the sidebar to start building</div>
           </div>
         ) : (
-          tree.children.map((node) => (
+          (tree?.children ?? []).map((node) => (
             <CanvasNode key={node.id} node={node} selected={selectedId === node.id} />
           ))
         )}

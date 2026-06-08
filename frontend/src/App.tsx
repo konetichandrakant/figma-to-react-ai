@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import useAuthStore from "./store/authStore";
 import { LoginPage, RegisterPage } from "./components/auth/AuthPages";
-import EditorPage from "./components/editor/EditorPage";
-import Dashboard from "./components/editor/Dashboard";
+import EditorPage from "./pages/EditorPage";
+import DashboardPage from "./pages/DashboardPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token, loading } = useAuthStore();
@@ -53,7 +53,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/editor" element={<ProtectedRoute><EditorPage /></ProtectedRoute>} />
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>

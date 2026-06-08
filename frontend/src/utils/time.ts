@@ -1,0 +1,25 @@
+/**
+ * Formats an ISO date string into a human-readable relative time string.
+ * e.g., "just now", "5 minutes ago", "2 hours ago", "3 days ago", "Jan 15, 2026"
+ */
+export function formatRelativeTime(dateStr: string): string {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHr = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHr / 24);
+
+  if (diffSec < 60) return "just now";
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHr < 24) return `${diffHr}h ago`;
+  if (diffDay < 7) return `${diffDay}d ago`;
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+  });
+}

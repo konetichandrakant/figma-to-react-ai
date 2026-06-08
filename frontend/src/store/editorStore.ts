@@ -20,7 +20,7 @@ function createNode(type: ComponentType): UINode {
 function deepFind(nodes: UINode[], id: string): UINode | null {
   for (const n of nodes) {
     if (n.id === id) return n;
-    const found = deepFind(n.children, id);
+    const found = deepFind(n.children || [], id);
     if (found) return found;
   }
   return null;
@@ -29,7 +29,7 @@ function deepFind(nodes: UINode[], id: string): UINode | null {
 function deepRemove(nodes: UINode[], id: string): UINode[] {
   return nodes
     .filter((n) => n.id !== id)
-    .map((n) => ({ ...n, children: deepRemove(n.children, id) }));
+    .map((n) => ({ ...n, children: deepRemove(n.children || [], id) }));
 }
 
 function deepUpdate(nodes: UINode[], id: string, patch: Partial<UINode>): UINode[] {
@@ -37,20 +37,28 @@ function deepUpdate(nodes: UINode[], id: string, patch: Partial<UINode>): UINode
     if (n.id === id) {
       return { ...n, ...patch };
     }
-    return { ...n, children: deepUpdate(n.children, id, patch) };
+    return { ...n, children: deepUpdate(n.children || [], id, patch) };
   });
 }
 
 function addChild(nodes: UINode[], parentId: string, child: UINode): UINode[] {
   return nodes.map((n: UINode): UINode => {
     if (n.id === parentId) {
-      return { ...n, children: [...n.children, child] };
+      return { ...n, children: [...(n.children || []), child] };
     }
-    return { ...n, children: addChild(n.children, parentId, child) };
+    return { ...n, children: addChild(n.children || [], parentId, child) };
   });
 }
 
 const ROOT_ID = "root";
+
+/** Ensure every node has a children array (fixes loaded JSON that may lack it) */
+function normalizeTree(node: UINode): UINode {
+  return {
+    ...node,
+    children: (node.children || []).map(normalizeTree),
+  };
+}
 
 const emptyTree: UINode = {
   id: ROOT_ID,
@@ -65,6 +73,8 @@ interface EditorState {
   selectedId: string | null;
   generatedCode: string;
   generating: boolean;
+  currentProjectId: number | null;
+  currentProjectName: string;
   addNode: (type: ComponentType, parentId?: string) => void;
   selectNode: (id: string | null) => void;
   updateNode: (id: string, patch: Partial<UINode>) => void;
@@ -75,6 +85,8 @@ interface EditorState {
   setGenerating: (v: boolean) => void;
   getSelectedNode: () => UINode | null;
   clearCanvas: () => void;
+  setCurrentProject: (id: number | null, name: string) => void;
+  resetEditor: () => void;
 }
 
 const useEditorStore = create<EditorState>((set, get) => ({
@@ -82,6 +94,8 @@ const useEditorStore = create<EditorState>((set, get) => ({
   selectedId: null,
   generatedCode: "",
   generating: false,
+  currentProjectId: null,
+  currentProjectName: "Untitled Project",
 
   addNode: (type: ComponentType, parentId?: string) => {
     const node = createNode(type);
@@ -125,7 +139,7 @@ const useEditorStore = create<EditorState>((set, get) => ({
     set({ tree: newTree });
   },
 
-  setTree: (tree: UINode) => set({ tree }),
+  setTree: (tree: UINode) => set({ tree: normalizeTree(tree) }),
 
   setGeneratedCode: (code: string) => set({ generatedCode: code }),
   setGenerating: (v: boolean) => set({ generating: v }),
@@ -137,6 +151,16 @@ const useEditorStore = create<EditorState>((set, get) => ({
   },
 
   clearCanvas: () => set({ tree: { ...emptyTree, children: [] }, selectedId: null, generatedCode: "" }),
+
+  setCurrentProject: (id: number | null, name: string) => set({ currentProjectId: id, currentProjectName: name }),
+
+  resetEditor: () => set({
+    tree: { ...emptyTree, children: [] },
+    selectedId: null,
+    generatedCode: "",
+    currentProjectId: null,
+    currentProjectName: "Untitled Project",
+  }),
 }));
 
 export default useEditorStore;

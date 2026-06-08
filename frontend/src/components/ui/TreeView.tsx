@@ -27,17 +27,17 @@ function TreeNode({ node, depth = 0 }: Props) {
           gap: "4px",
           padding: "4px 8px",
           marginLeft: depth * 16,
-          borderRadius: "6px",
-          fontSize: "0.8rem",
+          borderRadius: theme.radius.sm,
+          fontSize: "0.78rem",
           cursor: "pointer",
-          background: isSelected ? "rgba(102,126,234,0.1)" : "transparent",
+          background: isSelected ? "rgba(102, 126, 234, 0.08)" : "transparent",
           color: isSelected ? theme.colors.primary : theme.colors.textSecondary,
           fontWeight: isSelected ? 600 : 400,
           transition: theme.transitions.fast,
           borderLeft: isSelected ? `2px solid ${theme.colors.primary}` : "2px solid transparent",
         }}
         onMouseEnter={(e) => {
-          if (!isSelected) e.currentTarget.style.background = theme.colors.bgLight;
+          if (!isSelected) e.currentTarget.style.background = "rgba(102, 126, 234, 0.04)";
         }}
         onMouseLeave={(e) => {
           if (!isSelected) e.currentTarget.style.background = "transparent";
@@ -56,12 +56,12 @@ function TreeNode({ node, depth = 0 }: Props) {
         ) : (
           <span style={{ width: "12px" }} />
         )}
-        <span style={{ opacity: 0.6, fontSize: "0.7rem" }}>
+        <span style={{ opacity: 0.5, fontSize: "0.68rem" }}>
           {getTypeIcon(node.type)}
         </span>
         <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {node.type}
-          {node.text && <span style={{ opacity: 0.5, marginLeft: "4px" }}>"{node.text.slice(0, 15)}{node.text.length > 15 ? "..." : ""}"</span>}
+          {node.text && <span style={{ opacity: 0.4, marginLeft: "4px" }}>"{node.text.slice(0, 15)}{node.text.length > 15 ? "..." : ""}"</span>}
         </span>
         <span
           onClick={(e) => {
@@ -75,8 +75,14 @@ function TreeNode({ node, depth = 0 }: Props) {
             cursor: "pointer",
             width: "16px",
             textAlign: "center",
+            transition: theme.transitions.fast,
           }}
-          onMouseEnter={(e) => { e.currentTarget.parentElement!.querySelector("span:last-child")!.setAttribute("style", "opacity:1; font-size:0.7rem; color:#e53e3e; cursor:pointer; width:16px; text-align:center"); }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = "1";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = "0";
+          }}
         >
           ✕
         </span>
@@ -117,10 +123,10 @@ export default function TreeView() {
       bottom: "16px",
       left: "16px",
       width: "280px",
-      background: "rgba(255,255,255,0.97)",
+      background: "rgba(255, 255, 255, 0.95)",
       backdropFilter: "blur(12px)",
       borderRadius: theme.radius.lg,
-      border: `1px solid ${theme.colors.border}`,
+      border: `1px solid ${theme.colors.borderLight}`,
       boxShadow: theme.shadows.lg,
       zIndex: 100,
       overflow: "hidden",
@@ -133,12 +139,19 @@ export default function TreeView() {
           justifyContent: "space-between",
           padding: "10px 14px",
           cursor: "pointer",
-          borderBottom: visible ? `1px solid ${theme.colors.border}` : "none",
+          borderBottom: visible ? `1px solid ${theme.colors.borderLight}` : "none",
           fontWeight: 700,
-          fontSize: "0.75rem",
+          fontSize: "0.72rem",
           textTransform: "uppercase" as const,
-          letterSpacing: "0.5px",
+          letterSpacing: "0.8px",
           color: theme.colors.textMuted,
+          transition: theme.transitions.fast,
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = theme.colors.primary;
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = theme.colors.textMuted;
         }}
       >
         <span>UI Tree</span>
@@ -146,12 +159,12 @@ export default function TreeView() {
       </div>
       {visible && (
         <div style={{ padding: "8px", maxHeight: "300px", overflowY: "auto" }}>
-          {tree.children.length === 0 ? (
-            <div style={{ padding: "12px", textAlign: "center", color: theme.colors.textMuted, fontSize: "0.8rem" }}>
+          {(tree?.children?.length ?? 0) === 0 ? (
+            <div style={{ padding: "12px", textAlign: "center", color: theme.colors.textMuted, fontSize: "0.78rem" }}>
               Empty tree
             </div>
           ) : (
-            tree.children.map((child) => (
+            (tree?.children ?? []).map((child) => (
               <TreeNode key={child.id} node={child} />
             ))
           )}
